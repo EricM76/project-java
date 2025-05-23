@@ -58,6 +58,7 @@ public class ProductService {
         for (int i = 0; i < products.size(); i++) {
             if (Objects.equals(products.get(i).getSku(), modifyProduct.getSku())) {
                 products.set(i, modifyProduct);
+                return;
             }
         }
 
@@ -65,9 +66,11 @@ public class ProductService {
 
     }
 
-    public boolean removeProduct(int id) throws ProductException {
+    public void removeProduct(int id) throws ProductException {
 
-        products.removeIf(product -> product.getId() == id);
+        if(products.removeIf(product -> product.getId() == id)){
+            return;
+        }
 
         throw new ProductNotFoundException("No se encontró el producto con ID " + id);
 

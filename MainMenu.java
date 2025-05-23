@@ -76,7 +76,7 @@ public class MainMenu {
         System.out.print("Ingrese el ID del producto a actualizar: ");
         int id = scanner.nextInt();
         scanner.nextLine();
-        
+
         try {
             Product product = manager.getProductById(id);
 
@@ -98,10 +98,11 @@ public class MainMenu {
 
             Product productModify = new Product(name, price, stock, description);
             
+            productModify.setId(product.getId());
             productModify.setSku(product.getSku());
             manager.updateProduct(productModify);
             
-            System.out.println("Producto actualizado exitosamente!");
+            System.out.println("\nProducto actualizado exitosamente!");
 
         } catch (ProductException error) {
             clearScreen();
@@ -116,6 +117,7 @@ public class MainMenu {
         
         try {
             manager.removeProduct(id);
+            System.out.println("\nProducto eliminado exitosamente!");
         } catch (ProductException error) {
             clearScreen();
             System.out.println("\n=== INFORME DE ERROR ===\n");
