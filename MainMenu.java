@@ -1,6 +1,7 @@
 import models.Product;
 import services.ProductService;
 import exceptions.*;
+
 import java.util.Scanner;
 
 public class MainMenu {
@@ -12,18 +13,40 @@ public class MainMenu {
         this.manager = new ProductService();
     }
 
+    private void clearScreen() {
+
+        // forzar compatibilidad UTF-8 y modo ANSI
+        System.setProperty("terminal.encoding", "UTF-8");
+
+        // secuencia ANSI para limpiar pantalla
+        String clearCommand = "\033[H\033[2J";
+
+        try {
+            System.out.print(clearCommand);
+            System.out.flush();
+            
+        } catch (Exception e) {
+            System.err.println("Error al intentar limpiar la pantalla:");
+            System.err.println(e.getMessage());
+        }
+
+    }
+
     public void mostrarMenu() {
-        System.out.println("\n=== SISTEMA DE GESTIÓN DE PRODUCTOS ===");
+        clearScreen();
+        System.out.println("\n=== SISTEMA DE GESTIÓN DE PRODUCTOS ===\n");
         System.out.println("1. Agregar nuevo producto");
         System.out.println("2. Listar todos los productos");
         System.out.println("3. Actualizar producto existente");
         System.out.println("4. Eliminar producto");
         System.out.println("5. Salir");
-        System.out.print("Seleccione una opción: ");
+        System.out.print("\nSeleccione una opción: ");
     }
 
     public void addNewProduct() {
+
         try {
+            System.out.println("\n=== AGREGAR NUEVO PRODUCTO ===\n");
             System.out.print("Ingrese el nombre del producto: ");
             String name = scanner.next();
             System.out.print("Ingrese el precio del producto: ");
@@ -34,7 +57,7 @@ public class MainMenu {
             String description = scanner.next();
 
             manager.addProduct(name, price, stock, description);
-            System.out.println("Producto agregado exitosamente!");
+            System.out.println("\nProducto agregado exitosamente!");
         } catch (InvalidValueException error) {
             System.out.println(error.getMessage());
         }
@@ -42,6 +65,7 @@ public class MainMenu {
 
     public void listAllProducts() {
         try {
+            System.out.println("\n=== LISTAR PRODUCTOS ===\n");
             manager.listProducts();
         } catch (ProductException error) {
             System.out.println(error.getMessage());
@@ -52,7 +76,7 @@ public class MainMenu {
         System.out.print("Ingrese el ID del producto a actualizar: ");
         int id = scanner.nextInt();
         scanner.nextLine();
-
+        
         try {
             Product product = manager.getProductById(id);
 
@@ -73,11 +97,15 @@ public class MainMenu {
             String description = inputDescription.isEmpty() ? product.getDescription() : inputDescription;
 
             Product productModify = new Product(name, price, stock, description);
+            
             productModify.setSku(product.getSku());
             manager.updateProduct(productModify);
+            
             System.out.println("Producto actualizado exitosamente!");
 
         } catch (ProductException error) {
+            clearScreen();
+            System.out.println("\n=== INFORME DE ERROR ===\n");
             System.out.println(error.getMessage());
         }
     }
@@ -85,9 +113,12 @@ public class MainMenu {
     public void removeProduct() {
         System.out.print("Ingrese el código del producto a eliminar: ");
         int id = scanner.nextInt();
+        
         try {
             manager.removeProduct(id);
         } catch (ProductException error) {
+            clearScreen();
+            System.out.println("\n=== INFORME DE ERROR ===\n");
             System.out.println(error.getMessage());
         }
     }
@@ -97,7 +128,7 @@ public class MainMenu {
         do {
             mostrarMenu();
             opcion = scanner.nextInt();
-
+            clearScreen();
             switch (opcion) {
                 case 1:
                     addNewProduct();
@@ -116,6 +147,12 @@ public class MainMenu {
                     break;
                 default:
                     System.out.println("Opción inválida. Por favor, intente nuevamente.");
+            }
+
+            if(opcion != 5){
+                scanner.nextLine();
+                System.out.print("\nPresione cualquier tecla para continuar... ");
+                scanner.nextLine();
             }
         } while (opcion != 5);
     }
