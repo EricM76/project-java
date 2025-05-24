@@ -37,9 +37,10 @@ public class MainMenu {
         System.out.println("\n=== SISTEMA DE GESTIÓN DE PRODUCTOS ===\n");
         System.out.println("1. Agregar nuevo producto");
         System.out.println("2. Listar todos los productos");
-        System.out.println("3. Actualizar producto existente");
-        System.out.println("4. Eliminar producto");
-        System.out.println("5. Salir");
+        System.out.println("3. Buscar productos");
+        System.out.println("4. Actualizar producto existente");
+        System.out.println("5. Eliminar producto");
+        System.out.println("6. Salir");
         System.out.print("\nSeleccione una opción: ");
     }
 
@@ -77,6 +78,22 @@ public class MainMenu {
             System.out.println("\n=== LISTAR PRODUCTOS ===\n");
             manager.listProducts();
         } catch (ProductException error) {
+            System.out.println(error.getMessage());
+        }
+    }
+
+    public void findProducts() {
+        try {
+            System.out.println("\n=== BUSCAR PRODUCTOS ===\n");
+            System.out.print("Ingrese el criterio de búsqueda: ");
+            String keyword = scanner.next();
+
+            System.out.println("\n=== RESULTADO DE LA BÚSQUEDA ===\n");
+            manager.findProducts(keyword);
+
+        } catch (ProductException error) {
+            clearScreen();
+            System.out.println("\n=== INFORME DE ERROR ===\n");
             System.out.println(error.getMessage());
         }
     }
@@ -148,24 +165,27 @@ public class MainMenu {
                     listAllProducts();
                     break;
                 case 3:
-                    updateProduct();
+                    findProducts();
                     break;
                 case 4:
-                    removeProduct();
+                    updateProduct();
                     break;
                 case 5:
+                    removeProduct();
+                    break;
+                case 6:
                     System.out.println("¡Gracias por usar el sistema!");
                     break;
                 default:
                     System.out.println("Opción inválida. Por favor, intente nuevamente.");
             }
 
-            if(opcion != 5){
+            if(opcion != 6){
                 scanner.nextLine();
                 System.out.print("\nPresione cualquier tecla para continuar... ");
                 scanner.nextLine();
             }
-        } while (opcion != 5);
+        } while (opcion != 6);
     }
 
     public static void main(String[] args) {

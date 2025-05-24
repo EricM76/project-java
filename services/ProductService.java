@@ -12,11 +12,13 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class ProductService {
     private List<Product> products;
+    private List<Product> matchingProducts;
     private SkuGenerator skuGenerator;
     private AtomicInteger nexId;
 
     public ProductService() {
         this.products = new ArrayList<>();
+        this.matchingProducts = new ArrayList<>();
         this.skuGenerator = new SkuGenerator();
         this.nexId = new AtomicInteger(1);
     }
@@ -38,6 +40,36 @@ public class ProductService {
         }
 
         for (Product product : products) {
+            System.out.println("\n" + product.toString());
+        }
+    }
+
+    public void findProducts(String keyword) throws ProductException{
+        
+        if (matchingProducts != null && !matchingProducts.isEmpty()) {
+        matchingProducts.clear();
+        }
+
+        // intento de normalizacíon para optimizar la búsqueda
+        String regex = "[^\\w\\s+]";
+        String normalizedKeyword = keyword.replaceAll(regex, "").toLowerCase();
+        String searchPhrase = normalizedKeyword.toLowerCase();
+        
+
+        for (Product product : products) {
+            String productName = product.getName().replaceAll(regex, "").toLowerCase();
+            String productDescription = product.getDescription().replaceAll(regex, "").toLowerCase();
+        
+            if (productName.contains(searchPhrase) || productDescription.contains(searchPhrase)) {
+                matchingProducts.add(product);
+            }
+        }
+        
+        if (matchingProducts.isEmpty()) {
+            throw new ProductNotFoundException("No se encontraron productos que contengan " + keyword);
+        }
+
+        for (Product product : matchingProducts) {
             System.out.println("\n" + product.toString());
         }
     }
