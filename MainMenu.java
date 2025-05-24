@@ -44,21 +44,30 @@ public class MainMenu {
     }
 
     public void addNewProduct() {
+        scanner.nextLine();
 
         try {
             System.out.println("\n=== AGREGAR NUEVO PRODUCTO ===\n");
-            System.out.print("Ingrese el nombre del producto: ");
-            String name = scanner.next();
-            System.out.print("Ingrese el precio del producto: ");
-            double price = scanner.nextDouble();
-            System.out.print("Ingrese la cantidad del producto: ");
-            int stock = scanner.nextInt();
-            System.out.print("Ingrese la descripción del producto: ");
-            String description = scanner.next();
+            
+            System.out.print("Ingrese el nombre del producto (OBLIGATORIO): ");
+            String name = scanner.nextLine();
+            
+            System.out.print("Ingrese el precio del producto (OBLIGATORIO): ");
+            String inputPrice = scanner.nextLine();
+            double price =  !inputPrice.isEmpty() ? Double.parseDouble(inputPrice) : 0;
+
+            System.out.print("Ingrese la cantidad del producto (OBLIGATORIO): ");
+            String inputStock = scanner.nextLine();
+            int stock = !inputStock.isEmpty() ? Integer.parseInt(inputStock) : 0;
+
+            System.out.print("Ingrese la descripción del producto (OPCIONAL): ");
+            String description = scanner.nextLine();
 
             manager.addProduct(name, price, stock, description);
             System.out.println("\nProducto agregado exitosamente!");
         } catch (InvalidValueException error) {
+            clearScreen();
+            System.out.println("\n=== INFORME DE ERROR ===\n");
             System.out.println(error.getMessage());
         }
     }
