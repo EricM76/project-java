@@ -2,19 +2,18 @@ package services;
 import exceptions.InvalidValueException;
 import exceptions.ProductException;
 import exceptions.ProductNotFoundException;
-import models.Product;
-import utils.SkuGenerator;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
+import models.Product;
+import utils.SkuGenerator;
 
 public class ProductService {
-    private List<Product> products;
-    private List<Product> matchingProducts;
-    private SkuGenerator skuGenerator;
-    private AtomicInteger nexId;
+    private final List<Product> products;
+    private final List<Product> matchingProducts;
+    private final SkuGenerator skuGenerator;
+    private final AtomicInteger nexId;
 
     public ProductService() {
         this.products = new ArrayList<>();

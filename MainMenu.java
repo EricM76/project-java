@@ -1,12 +1,11 @@
+import exceptions.*;
+import java.util.Scanner;
 import models.Product;
 import services.ProductService;
-import exceptions.*;
-
-import java.util.Scanner;
 
 public class MainMenu {
-    private Scanner scanner;
-    private ProductService manager;
+    private final Scanner scanner;
+    private final ProductService manager;
 
     public MainMenu() {
         this.scanner = new Scanner(System.in);
@@ -158,26 +157,13 @@ public class MainMenu {
             opcion = scanner.nextInt();
             clearScreen();
             switch (opcion) {
-                case 1:
-                    addNewProduct();
-                    break;
-                case 2:
-                    listAllProducts();
-                    break;
-                case 3:
-                    findProducts();
-                    break;
-                case 4:
-                    updateProduct();
-                    break;
-                case 5:
-                    removeProduct();
-                    break;
-                case 6:
-                    System.out.println("¡Gracias por usar el sistema!");
-                    break;
-                default:
-                    System.out.println("Opción inválida. Por favor, intente nuevamente.");
+                case 1 -> addNewProduct();
+                case 2 -> listAllProducts();
+                case 3 -> findProducts();
+                case 4 -> updateProduct();
+                case 5 -> removeProduct();
+                case 6 -> System.out.println("¡Gracias por usar el sistema!");
+                default -> System.out.println("Opción inválida. Por favor, intente nuevamente.");
             }
 
             if(opcion != 6){
